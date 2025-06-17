@@ -16,17 +16,23 @@ def csw2gpkg(url, filename):
         csw.getrecords2(maxrecords=max_records_per_request, startposition=start_position)
         print(f"Record: {start_position}")
         for rec in csw.records:
-            polygon = Polygon([
-                (csw.records[rec].bbox.minx, csw.records[rec].bbox.miny),
-                (csw.records[rec].bbox.minx, csw.records[rec].bbox.maxy),
-                (csw.records[rec].bbox.maxx, csw.records[rec].bbox.maxy),
-                (csw.records[rec].bbox.maxx, csw.records[rec].bbox.miny),
-                (csw.records[rec].bbox.minx, csw.records[rec].bbox.miny),
-                (csw.records[rec].bbox.minx, csw.records[rec].bbox.miny)
-            ])
-            titles.append(csw.records[rec].title)
-            geometries.append(polygon)
-            metadata_id.append(rec)
+            try:
+                polygon = Polygon([
+                    (csw.records[rec].bbox.minx, csw.records[rec].bbox.miny),
+                    (csw.records[rec].bbox.minx, csw.records[rec].bbox.maxy),
+                    (csw.records[rec].bbox.maxx, csw.records[rec].bbox.maxy),
+                    (csw.records[rec].bbox.maxx, csw.records[rec].bbox.miny),
+                    (csw.records[rec].bbox.minx, csw.records[rec].bbox.miny),
+                    (csw.records[rec].bbox.minx, csw.records[rec].bbox.miny)
+                ])
+                titles.append(csw.records[rec].title)
+                geometries.append(polygon)
+                metadata_id.append(rec)
+            except:
+                print(f"Record {rec} has no bounding box")
+                titles.append(csw.records[rec].title)
+                geometries.append(None)
+                metadata_id.append(rec)
         start_position += max_records_per_request
     gdf = gpd.GeoDataFrame({'title': titles, 'geometry': geometries, 'metadata_id': metadata_id}, crs="EPSG:4326")
     gdf.to_file(filename, driver='GPKG')
