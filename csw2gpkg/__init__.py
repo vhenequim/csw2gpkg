@@ -4,15 +4,9 @@ from owslib.csw import CatalogueServiceWeb
 from shapely.geometry import Polygon
 
 def csw2gpkg(url, filename):
-<<<<<<< HEAD
     titles = []
     geometries = []
     metadata_id = []
-=======
-    return True
-    """url = "http://bdgex.eb.mil.br/csw"
-    from owslib.csw import CatalogueServiceWeb
->>>>>>> 5d0bc92a314ddccbac1b2acadde68ba30ff0fc4d
     csw = CatalogueServiceWeb(url)
     csw.getrecords2(maxrecords=10)
     total_records = csw.results['matches']
@@ -43,8 +37,6 @@ def csw2gpkg(url, filename):
     gdf = gpd.GeoDataFrame({'title': titles, 'geometry': geometries, 'metadata_id': metadata_id}, crs="EPSG:4326")
     gdf.to_file(filename, driver='GPKG')
     return None
-
-
 
 if __name__ == "__main__":
     print(csw2gpkg("http://bdgex.eb.mil.br/csw", "bdgex.gpkg"))
