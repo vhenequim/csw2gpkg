@@ -2,7 +2,7 @@ import owslib
 import geopandas as gpd
 
 def csw2gpkg(url, filename):
-    return None
+    return True
     """url = "http://bdgex.eb.mil.br/csw"
     from owslib.csw import CatalogueServiceWeb
     csw = CatalogueServiceWeb(url)
